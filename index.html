@@ -1,341 +1,648 @@
 
-
 <!DOCTYPE html>
 <html lang="fr">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#090d18">
 <title>SWAHILI STREAM</title>
+
 <style>
 *{box-sizing:border-box}
-body{margin:0;background:#101018;color:white;font-family:Arial,sans-serif}
-header{background:#191927;padding:18px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px}
-.logo{color:#ffb000;font-size:23px;font-weight:bold}
-nav{display:flex;gap:8px;flex-wrap:wrap}
-button{border:0;border-radius:8px;padding:11px 14px;background:#ffb000;color:#171717;font-weight:bold;cursor:pointer}
-button.secondary{background:#333344;color:white}
-input,textarea,select{width:100%;padding:12px;margin:7px 0 14px;border:1px solid #444;border-radius:8px;background:#20202e;color:white}
-main{padding:18px;max-width:1100px;margin:auto}
-section{display:none}
-section.active{display:block}
-.hero{background:linear-gradient(120deg,#382044,#171727);padding:35px 20px;border-radius:15px;margin-bottom:20px}
-.hero h1{font-size:32px}
-h2{color:#ffb000}
-.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(155px,1fr));gap:15px}
-.movie{background:#20202e;border-radius:12px;overflow:hidden}
-.movie img{width:100%;height:210px;object-fit:cover;background:#333}
-.movie .info{padding:12px}
-.movie h3{margin:5px 0}
-small{color:#bbb}
-.panel{background:#20202e;padding:18px;border-radius:12px;margin:15px 0}
+body{
+ margin:0;background:#090d18;color:white;
+ font-family:Arial,sans-serif
+}
+header{
+ background:#121b2c;padding:17px;
+ display:flex;justify-content:space-between;
+ align-items:center;position:sticky;top:0;z-index:5
+}
+.logo{color:#ffc83d;font-weight:bold;font-size:20px}
+button{border:0;border-radius:9px;padding:12px;
+ font-weight:bold;cursor:pointer}
+.gold{background:#ffc83d;color:#101522}
+.dark{background:#26344a;color:white}
+.page{display:none;padding:18px 15px 100px;min-height:85vh}
+.page.active{display:block}
+h2{color:#ffc83d}
+p{color:#c5cede;line-height:1.5}
+input,select,textarea{
+ width:100%;padding:13px;margin:7px 0;
+ background:#1c2940;color:white;
+ border:1px solid #35435b;border-radius:9px
+}
+.card{
+ background:#172338;border:1px solid #293951;
+ padding:14px;border-radius:13px;margin:12px 0
+}
+.hero{
+ background:linear-gradient(135deg,#273e60,#101827,#633f18);
+ padding:25px 18px;border-radius:16px;margin:12px 0
+}
+.hero h1{color:#ffc83d}
+.grid{
+ display:grid;grid-template-columns:repeat(2,minmax(0,1fr));
+ gap:12px
+}
+.poster{
+ height:125px;border-radius:9px;
+ background:linear-gradient(135deg,#263b59,#815b32);
+ display:flex;align-items:center;justify-content:center;
+ font-size:43px
+}
+.movie h3{font-size:15px}
+.movie button{width:100%;margin-top:5px}
+nav{
+ position:fixed;bottom:0;left:0;width:100%;
+ background:#121b2c;display:flex;
+ justify-content:space-around;padding:7px 2px;
+ border-top:1px solid #344158;z-index:10
+}
+nav button{
+ background:transparent;color:white;
+ font-size:10px;padding:8px 3px
+}
+nav button.active{color:#ffc83d}
 .hidden{display:none!important}
-footer{text-align:center;padding:25px;color:#aaa}
-video{width:100%;max-height:450px;background:#000;border-radius:12px}
+.small{font-size:12px;color:#aebbd0}
+.center{text-align:center}
+video,iframe{width:100%;border:0;border-radius:10px}
+iframe{aspect-ratio:16/9}
+.tag{color:#ffc83d;font-size:12px}
+hr{border:0;border-top:1px solid #344158;margin:18px 0}
 </style>
 </head>
+
 <body>
 
 <header>
-  <div class="logo">SWAHILI STREAM</div>
-  <nav>
-    <button onclick="show('home')">Accueil</button>
-    <button onclick="show('catalog')">Catalogue</button>
-    <button onclick="show('premium')">Premium</button>
-    <button onclick="show('account')">Mon compte</button>
-    <button onclick="show('admin')">Administration</button>
-    <button class="secondary" onclick="show('settings')">Paramètres</button>
-  </nav>
+ <div class="logo">▶ SWAHILI STREAM</div>
+ <button class="dark" onclick="openPage('notifications')">🔔</button>
 </header>
 
-<main>
-
-<section id="home" class="active">
-  <div class="hero">
-    <h1>Bienvenue sur SWAHILI STREAM</h1>
-    <p>Découvre des films et des séries en swahili, français et anglais.</p>
-    <button onclick="show('catalog')">Découvrir les films</button>
-  </div>
-  <h2>Nos programmes</h2>
-  <div class="grid" id="homeMovies"></div>
+<!-- BIENVENUE -->
+<section id="welcome" class="page active center">
+ <div style="font-size:65px">▶</div>
+ <h1 style="color:#ffc83d">SWAHILI STREAM</h1>
+ <h2>Karibu !</h2>
+ <p>Films, formations et divertissements africains.</p>
+ <button class="gold" style="width:100%"
+ onclick="openPage('register')">Créer un compte</button>
+ <br><br>
+ <button class="dark" style="width:100%"
+ onclick="openPage('login')">Se connecter</button>
 </section>
 
-<section id="catalog">
-  <h2>Catalogue des films et séries</h2>
-  <input id="search" placeholder="Rechercher un film ou une série..." oninput="render()">
-  <div class="grid" id="movies"></div>
+<!-- INSCRIPTION -->
+<section id="register" class="page">
+ <h2>Créer un compte</h2>
+ <input id="name" placeholder="Votre nom">
+ <input id="email" type="email" placeholder="Votre e-mail">
+ <input id="password" type="password" placeholder="Mot de passe">
+ <button class="gold" style="width:100%" onclick="registerUser()">
+ Créer mon compte
+ </button>
+ <p class="small">Version de démonstration : une authentification sécurisée par serveur reste à installer.</p>
 </section>
 
-<section id="watch">
-  <button class="secondary" onclick="show('catalog')">← Retour au catalogue</button>
-  <div class="panel">
-    <h2 id="watchTitle"></h2>
-    <p id="watchDescription"></p>
-    <video id="player" controls playsinline></video>
-    <p id="videoMessage">Si la vidéo ne démarre pas, vérifie son adresse.</p>
+<!-- CONNEXION -->
+<section id="login" class="page">
+ <h2>Connexion</h2>
+ <input id="loginEmail" type="email" placeholder="Adresse e-mail">
+ <input id="loginPassword" type="password" placeholder="Mot de passe">
+ <button class="gold" style="width:100%" onclick="loginUser()">
+ Se connecter
+ </button>
+</section>
+
+<!-- ACCUEIL -->
+<section id="home" class="page">
+ <div class="hero">
+  <p>BIENVENUE SUR</p>
+  <h1>SWAHILI STREAM</h1>
+  <p>Votre espace de films, de formations et de musique DJ.</p>
+ </div>
+
+ <h2>Nos espaces</h2>
+
+ <div class="card" onclick="showCategory('film')">
+  <h3>🎬 Films et séries</h3>
+  <p>Découvrez les films et séries africains.</p>
+  <button class="gold">Découvrir</button>
+ </div>
+
+ <div class="card" onclick="showCategory('cours')">
+  <h3>📚 Cours et formations</h3>
+  <p>Apprenez grâce aux formations vidéo.</p>
+  <button class="gold">Découvrir</button>
+ </div>
+
+ <div class="card" onclick="showCategory('dj')">
+  <h3>🎧 Espace DJ</h3>
+  <p>Découvrez les mixages et les créations DJ.</p>
+  <button class="gold">Découvrir</button>
+ </div>
+
+ <h2>Mes achats</h2>
+ <button class="dark" style="width:100%"
+ onclick="openPage('purchases')">Voir mes contenus achetés</button>
+</section>
+
+<!-- CATALOGUE -->
+<section id="catalog" class="page">
+ <h2 id="catalogTitle">Catalogue</h2>
+ <input id="search" placeholder="Rechercher un contenu..." oninput="displayItems()">
+ <div id="items" class="grid"></div>
+</section>
+
+<!-- DÉTAILS -->
+<section id="details" class="page">
+ <button class="dark" onclick="openPage('catalog')">← Retour</button>
+ <div class="hero">
+  <div id="detailPoster" style="font-size:55px">🎬</div>
+  <h1 id="detailTitle"></h1>
+  <p id="detailDescription"></p>
+  <p class="tag" id="detailCategory"></p>
+  <h2 id="detailPrice"></h2>
+ </div>
+
+ <h2>Extrait gratuit</h2>
+ <div id="preview"></div>
+
+ <div class="card">
+  <h3>Accéder au contenu complet</h3>
+  <p id="accessMessage"></p>
+  <button id="buyButton" class="gold" style="width:100%"
+  onclick="window.location.href='URL>Acheter ce contenu</button>
+  <button id="openVideo" class="gold hidden"
+  style="width:100%" onclick="openPurchasedLink()">
+  OUVRIR LE LIEN YOUTUBE
+  </button>
+ </div>
+</section>
+
+<script type="module">
+  // Import the functions you need from the SDKs you need
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/13.2.0/firebase-app.js";
+  import { getAnalytics } from "https://www.gstatic.com/firebasejs/13.2.0/firebase-analytics.js";
+  // TODO: Add SDKs for Firebase products that you want to use
+  // https://firebase.google.com/docs/web/setup#available-libraries
+
+  // Your web app's Firebase configuration
+  // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+  const firebaseConfig = {
+    apiKey: "AIzaSyCdCD8u2fHiLZxQQRqyItgZxFG-Xin0mJk",
+    authDomain: "swahilistream-6c403.firebaseapp.com",
+    projectId: "swahilistream-6c403",
+    storageBucket: "swahilistream-6c403.firebasestorage.app",
+    messagingSenderId: "665440770367",
+    appId: "1:665440770367:web:108f163c651ab9443cdb8a",
+    measurementId: "G-T14YZ7XKKZ"
+  };
+
+  // Initialize Firebase
+  const app = initializeApp(firebaseConfig);
+  const analytics = getAnalytics(app);
+function submitPaymentProof() {
+    const phone = document.getElementById('payerPhone').value;
+    const txId = document.getElementById('txId').value;
+    
+    if(!phone || !txId) {
+        alert("Veuillez remplir tous les champs s'il vous plaît.");
+        return;
+    }
+
+    // Sauvegarder dans le localStorage pour simuler le compte client
+    let purchases = JSON.parse(localStorage.getItem('myPurchases') || '[]');
+    purchases.push({ phone: phone, txId: txId, date: new Date().toLocaleDateString() });
+    localStorage.setItem('myPurchases', JSON.stringify(purchases));
+
+    alert("Merci ! Votre paiement est en cours de vérification. L'accès sera validé sous peu.");
+    
+    // Optionnel : Envoi automatique sur WhatsApp admin (mettez votre numéro)
+    // window.open(`https://wa.me/243XXXXXXXXX?text=Bonjour,%20voici%20ma%20preuve%20de%20paiement.%20Téléphone:%20${phone},%20Réf:%20${txId}`);
+}
+
+</script>
+<h2>Moyens de paiement</h2>
+  <div class="grid-paiement">
+    <div class="carte-paiement">
+      <h3>M-Pesa / Airtel / Orange</h3>
+      <p>Numéro : +243 XXXXXXXX</p>
+      <p>Numéro : +243 995056814</p>
+      <p>Numéro : +243 XXXXXXXX</p>
+      <p>Nom : NYEMBO SIWEON</p>
+    </div>
+  </div>
+
+  <!-- Formulaire de confirmation de paiement -->
+  <div class="payment-form">
+    <h3>Confirmer votre paiement</h3>
+    <input type="tel" id="payerPhone" placeholder="Votre numéro de téléphone (ex: 0812345678)" required>
+    <input type="text" id="txId" placeholder="ID de transaction / Réf. SMS" required>
+    <button onclick="submitPaymentProof()">Envoyer la preuve de paiement</button>
   </div>
 </section>
 
-<section id="account">
-  <h2>Mon compte</h2>
-  <div class="panel">
-    <h3>Créer un compte ou se connecter</h3>
-    <label>Adresse e-mail</label>
-    <input id="email" type="email" placeholder="Ton adresse e-mail">
-    <label>Mot de passe (démo uniquement)</label>
-    <input id="password" type="password" placeholder="Mot de passe">
-    <button onclick="login()">Entrer / Créer un compte démo</button>
-    <p id="accountMessage"></p>
-    <button class="secondary" onclick="logout()">Se déconnecter</button>
-  </div>
+<!-- MES ACHATS -->
+<section id="purchases" class="page">
+ <h2>Mes contenus achetés</h2>
+ <div id="purchaseList"></div>
 </section>
 
-<section id="premium">
-  <h2>Abonnement Premium</h2>
-  <div class="panel">
-    <h1>10 USD / mois</h1>
-    <p>Accès Premium à notre catalogue, selon les droits de diffusion.</p>
-    <p>Choisis un moyen de paiement :</p>
-    <select id="payment">
-      <option>M-Pesa</option>
-      <option>Airtel Money</option>
-      <option>Orange Money</option>
-      <option>Visa / Mastercard</option>
-    </select>
-    <button onclick="paymentDemo()">Continuer</button>
-    <p id="paymentMessage"></p>
-    <small>Démo : aucun argent ne sera prélevé. Le paiement réel n'est pas encore connecté.</small>
-  </div>
+<!-- ADMINISTRATION -->
+<section id="admin" class="page">
+ <h2>Administration</h2>
+ 
+
+ <div class="card">
+  <h3>Ajouter un contenu</h3>
+  <input id="adminTitle" placeholder="Titre du contenu">
+  <textarea id="adminDescription" placeholder="Description"></textarea>
+
+  <select id="adminCategory">
+   <option value="film">🎬 Film / Série</option>
+   <option value="cours">📚 Cours / Formation</option>
+   <option value="dj">🎧 DJ / Mixage</option>
+  </select>
+
+  <input id="adminPrice" type="number" min="0" step="0.01"
+  placeholder="Prix en dollars">
+
+  <input id="adminPreview" placeholder="Lien YouTube de l'extrait">
+  <input id="adminLink" placeholder="Lien YouTube du contenu complet">
+
+  <button class="gold" style="width:100%" onclick="addItem()">
+  Ajouter au catalogue
+  </button>
+ </div>
+
+ <h2>Gestion des contenus</h2>
+ <div id="adminList"></div>
+
+ <p class="small">
+ Mode administrateur actif".
+ </p>
 </section>
 
-<section id="admin">
-  <h2>Administration</h2>
-  <div class="panel">
-    <h3>Ajouter un film ou une série</h3>
-    <label>Titre</label>
-    <input id="newTitle" placeholder="Nom du programme">
-    <label>Type</label>
-    <select id="newType">
-      <option>Film</option>
-      <option>Série</option>
-    </select>
-    <label>Langue</label>
-    <select id="newLanguage">
-      <option>Swahili</option>
-      <option>Français</option>
-      <option>Anglais</option>
-    </select>
-    <label>Description</label>
-    <textarea id="newDescription" placeholder="Description du programme"></textarea>
-    <label>Adresse de l'affiche (URL)</label>
-    <input id="newPoster" placeholder="https://exemple.com/affiche.jpg">
-    <label>Adresse de la vidéo (URL MP4)</label>
-    <input id="newVideo" placeholder="https://exemple.com/video.mp4">
-    <button onclick="addMovie()">Ajouter au catalogue</button>
-    <p id="adminMessage"></p>
-  </div>
-
-  <div class="panel">
-    <h3>Gérer les programmes</h3>
-    <div id="adminMovies"></div>
-  </div>
-  <small>Cette administration de démonstration n'est pas protégée. Ne l'utilise pas pour gérer un vrai site public.</small>
+<!-- NOTIFICATIONS -->
+<section id="notifications" class="page">
+ <h2>Notifications</h2>
+ <div class="card">
+  <p>Bienvenue sur SWAHILI STREAM !</p>
+  <p class="small">Découvrez nos nouveaux contenus.</p>
+ </div>
 </section>
 
-<section id="settings">
+
+<!-- PARAMETRES -->
+<section id="settings" class="page">
   <h2>Paramètres</h2>
-  <div class="panel">
-    <label>Langue de préférence</label>
-    <select id="language" onchange="saveLanguage()">
-      <option>Français</option>
-      <option>Swahili</option>
-      <option>English</option>
-    </select>
-    <button onclick="notify()">Tester les notifications</button>
-    <p id="settingsMessage"></p>
+  
+  <div class="card">
+    <h3>Mon profil</h3>
+    <p id="profileName">Nom : Invité</p>
+    <p id="profileEmail">Email : Aucun compte</p>
+    <button class="gold" style="width:100%; margin-top:10px;" onclick="openPage('login')">Se connecter / Inscription</button>
   </div>
+
+  <div class="card">
+    <h3>Options & Paiements</h3>
+    <button style="width:100%; margin-bottom:10px;" onclick="openPage('purchases')">Mes contenus achetés</button>
+    <button style="width:100%;" onclick="openPage('payment')">Voir les moyens de paiement</button>
+  </div>
+
+  <div class="card">
+    <h3>Langue</h3>
+    <select id="language" style="width:100%; padding:10px;">
+      <option value="fr">Français</option>
+      <option value="sw">Kiswahili</option>
+      <option value="en">English</option>
+    </select>
+  </div>
+
+  <button class="dark" style="width:100%; margin-top:15px;" onclick="logout()">Se déconnecter</button>
 </section>
 
-</main>
 
-<footer>
-  SWAHILI STREAM © 2026 — Films et séries avec autorisation de diffusion.
-</footer>
+
+ <div class="card">
+  <h3>Langue</h3>
+  <select id="language">
+   <option value="fr">Français</option>
+   <option value="sw">Kiswahili</option>
+   <option value="en">English</option>
+  </select>
+ </div>
+
+ <button class="dark" style="width:100%" onclick="logout()">
+ Se déconnecter
+ </button>
+</section>
+
+<!-- MENU -->
+<nav id="menu" class="hidden">
+ <button onclick="openPage('home')">🏠<br>Accueil</button>
+ <button onclick="showCategory('film')">🎬<br>Films</button>
+ <button onclick="openPage('purchases')">🛒<br>Achats</button>
+ <button onclick="openPage('settings')">⚙️<br>Profil</button>
+</nav>
 
 <script>
-const initialMovies = [
-  {
-    id:1,
-    title:"Exemple de série swahili",
-    type:"Série",
-    language:"Swahili",
-    description:"Exemple de présentation. Remplace ce programme par une vidéo que tu as le droit de diffuser.",
-    poster:"",
-    video:""
-  },
-  {
-    id:2,
-    title:"Exemple de film",
-    type:"Film",
-    language:"Français",
-    description:"Voici un exemple de film dans le catalogue.",
-    poster:"",
-    video:""
-  }
-];
 
-let movies = JSON.parse(localStorage.getItem("swMovies") || "null") || initialMovies;
-let currentUser = localStorage.getItem("swUser") || "";
+// DONNÉES
+let contents = JSON.parse(localStorage.getItem('ss_contents') || '[]');
+let purchases = JSON.parse(localStorage.getItem('ss_purchases') || '[]');
+let currentUser = JSON.parse(localStorage.getItem('ss_user') || 'null');
+let selectedItem = null;
+let currentCategory = 'film';
 
-function save(){
-  localStorage.setItem("swMovies",JSON.stringify(movies));
+const categoryNames = {
+ film:'Films et séries',
+ cours:'Cours et formations',
+ d
+};
+
+function saveData(){
+ localStorage.setItem('ss_contents',JSON.stringify(contents));
+ localStorage.setItem('ss_purchases',JSON.stringify(purchases));
 }
 
-function show(id){
-  document.querySelectorAll("main section").forEach(s=>s.classList.remove("active"));
-  document.getElementById(id).classList.add("active");
-  if(id==="catalog" || id==="home" || id==="admin") render();
+// NAVIGATION
+function openPage(id){
+ document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+ document.getElementById(id).classList.add('active');
+
+ const publicPages=['welcome','register','login'];
+ document.getElementById('menu').classList.toggle('hidden',publicPages.includes(id));
+
+ window.scrollTo(0,0);
+
+ if(id==='purchases') displayPurchases();
+ if(id==='admin') displayAdmin();
 }
 
-function render(){
-  const query=(document.getElementById("search")?.value || "").toLowerCase();
-  const filtered=movies.filter(m=>
-    m.title.toLowerCase().includes(query) ||
-    m.language.toLowerCase().includes(query)
-  );
+// GESTION DES UTILISATEURS RÉELS
+function registerUser() {
+    const name = document.getElementById('name').value.trim();
+    const email = document.getElementById('email').value.trim();
+    const password = document.getElementById('password').value;
 
-  const cards=filtered.map(m=>`
-    <div class="movie">
-      <img src="${safe(m.poster)}" alt="Affiche de ${safe(m.title)}"
-        onerror="this.style.background='#333';this.removeAttribute('src')">
-      <div class="info">
-        <h3>${safe(m.title)}</h3>
-        <small>${safe(m.type)} • ${safe(m.language)}</small>
-        <p>${safe(m.description)}</p>
-        <button onclick="watchMovie(${m.id})">Voir</button>
-      </div>
-    </div>
-  `).join("");
+    if(!name || !email || password.length < 6) {
+        alert("Veuillez remplir tous les champs. Le mot de passe doit contenir au moins 6 caractères.");
+        return;
+    }
 
-  document.getElementById("movies").innerHTML=cards || "<p>Aucun programme trouvé.</p>";
-  document.getElementById("homeMovies").innerHTML=cards;
-
-  document.getElementById("adminMovies").innerHTML=movies.map(m=>`
-    <div class="panel">
-      <b>${safe(m.title)}</b>
-      <button class="secondary" onclick="deleteMovie(${m.id})">Supprimer</button>
-    </div>
-  `).join("");
+    const user = { name, email, password };
+    localStorage.setItem('currentUser', JSON.stringify(user));
+    
+    updateProfileDisplay();
+    alert("Compte créé avec succès !");
+    openPage('home');
 }
 
-function safe(value){
-  return String(value || "").replace(/[&<>"']/g,c=>({
-    "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"
-  }[c]));
+function loginUser() {
+    const email = document.getElementById('loginEmail').value.trim();
+    const password = document.getElementById('loginPassword').value;
+
+    const storedUser = JSON.parse(localStorage.getItem('currentUser'));
+
+    if(!storedUser || storedUser.email !== email || storedUser.password !== password) {
+        alert("Identifiants incorrects.");
+        return;
+    }
+
+    updateProfileDisplay();
+    alert("Connexion réussie !");
+    openPage('home');
 }
 
-function watchMovie(id){
-  const m=movies.find(x=>x.id===id);
-  if(!m)return;
-  document.getElementById("watchTitle").textContent=m.title;
-  document.getElementById("watchDescription").textContent=m.description;
-  const player=document.getElementById("player");
-  player.pause();
-  player.src=m.video || "";
-  player.load();
-  document.getElementById("videoMessage").textContent=
-    m.video ? "Vidéo chargée." : "Aucune vidéo n'a encore été ajoutée.";
-  show("watch");
+function updateProfileDisplay() {
+    const user = JSON.parse(localStorage.getItem('currentUser'));
+    const profileName = document.getElementById('profileName');
+    const profileEmail = document.getElementById('profileEmail');
+
+    if(user) {
+        profileName.textContent = `Nom : ${user.name}`;
+        profileEmail.textContent = `Email : ${user.email}`;
+    } else {
+        profileName.textContent = "Nom : Invité";
+        profileEmail.textContent = "Email : Aucun compte";
+    }
 }
 
-function addMovie(){
-  const title=document.getElementById("newTitle").value.trim();
-  const description=document.getElementById("newDescription").value.trim();
-  const video=document.getElementById("newVideo").value.trim();
-  const poster=document.getElementById("newPoster").value.trim();
+// VÉRIFICATION DES PAIEMENTS
+function verifyPayment() {
+    const reference = document.getElementById('payRef').value.trim();
+    if(!reference) {
+        alert("Veuillez entrer la référence de votre transaction.");
+        return;
+    }
 
-  if(!title){
-    alert("Écris le titre du programme.");
-    return;
-  }
-
-  if(video && !/^https:\/\//i.test(video)){
-    alert("Utilise une adresse vidéo HTTPS.");
-    return;
-  }
-  if(poster && !/^https:\/\//i.test(poster)){
-    alert("Utilise une adresse d'affiche HTTPS.");
-    return;
-  }
-
-  movies.unshift({
-    id:Date.now(),
-    title:title,
-    type:document.getElementById("newType").value,
-    language:document.getElementById("newLanguage").value,
-    description:description,
-    poster:poster,
-    video:video
-  });
-
-  save();
-  render();
-  document.getElementById("adminMessage").textContent="Programme ajouté !";
-  ["newTitle","newDescription","newVideo","newPoster"].forEach(id=>{
-    document.getElementById(id).value="";
-  });
+    // Ici, vous ajouteriez la logique pour envoyer cette référence à votre backend
+    // ou vérifier la confirmation manuellement.
+    alert("Preuve soumise. Votre accès sera validé après vérification.");
+    console.log("Transmission de la référence :", reference);
 }
 
-function deleteMovie(id){
-  if(!confirm("Supprimer ce programme ?"))return;
-  movies=movies.filter(m=>m.id!==id);
-  save();
-  render();
+function logout() {
+    localStorage.removeItem('currentUser');
+    updateProfileDisplay();
+    alert("Vous êtes déconnecté.");
+    openPage('home');
 }
 
-function login(){
-  const email=document.getElementById("email").value.trim();
-  const password=document.getElementById("password").value;
+// Initialisation au chargement
+document.addEventListener('DOMContentLoaded', updateProfileDisplay);
 
-  if(!email || !password){
-    document.getElementById("accountMessage").textContent="Remplis les deux champs.";
-    return;
-  }
 
-  // Connexion locale de démonstration, pas une vraie authentification.
-  currentUser=email;
-  localStorage.setItem("swUser",email);
-  document.getElementById("accountMessage").textContent="Compte démo ouvert : "+email;
+// DÉTAILS
+function showDetails(id){
+ selectedItem=contents.find(x=>x.id===id);
+ if(!selectedItem)return;
+
+ document.getElementById('detailTitle').textContent=selectedItem.title;
+ document.getElementById('detailDescription').textContent=selectedItem.description;
+ document.getElementById('detailCategory').textContent=categoryNames[selectedItem.category];
+ document.getElementById('detailPrice').textContent='$'+Number(selectedItem.price).toFixed(2);
+
+ const idVideo=youtubeId(selectedItem.preview);
+ document.getElementById('preview').innerHTML=idVideo
+ ? '<iframe src="https://www.youtube-nocookie.com/embed/'+encodeURIComponent(idVideo)+'" allowfullscreen></iframe>'
+ : '<p>Aucun extrait ajouté.</p>';
+
+ const bought=purchases.includes(selectedItem.id);
+ document.getElementById('buyButton').classList.toggle('hidden',bought);
+ document.getElementById('openVideo').classList.toggle('hidden',!bought);
+
+ document.getElementById('accessMessage').textContent=
+ bought?'Vous avez déjà accès à ce contenu.':'Achetez ce contenu pour accéder à son lien YouTube.';
+
+ openPage('details');
 }
 
-function logout(){
-  currentUser="";
-  localStorage.removeItem("swUser");
-  document.getElementById("accountMessage").textContent="Déconnexion effectuée.";
+function confirmPurchase() {
+    const user = JSON.parse(localStorage.getItem('currentUser'));
+    if(!user) {
+        alert("Veuillez vous connecter pour acheter ce contenu.");
+        openPage('settings');
+        return;
+    }
+
+    // Ici, vous pouvez intégrer la vérification de paiement ou l'ajout direct
+    alert("Demande d'achat enregistrée. Veuillez confirmer votre paiement dans l'onglet dédié.");
+    openPage('payment');
+}
+``` Remplacez l'appel de bouton dans votre HTML par `confirmPurchase()`.
+
+
+ if(!confirm('Confirmer cet achat de à $'+selectedItem.price+' ? Aucun paiement réel ne sera effectué.'))return;
+
+ purchases.push(selectedItem.id);
+ saveData();
+ showDetails(selectedItem.id);
+ alert('Achat de egistré.');
 }
 
-function paymentDemo(){
-  const method=document.getElementById("payment").value;
-  document.getElementById("paymentMessage").textContent=
-    "Moyen choisi : "+method+". Paiement de démonstration uniquement : aucun débit effectué.";
+function openPurchasedLink(){
+ if(!selectedItem || !purchases.includes(selectedItem.id))return;
+ if(!selectedItem.link){
+  alert('Le lien du contenu n’a pas encore été ajouté.');
+  return;
+ }
+ window.open(selectedItem.link,'_blank','noopener');
 }
 
-function saveLanguage(){
-  const language=document.getElementById("language").value;
-  localStorage.setItem("swLanguage",language);
-  document.getElementById("settingsMessage").textContent=
-    "Préférence enregistrée : "+language+". La traduction complète reste à ajouter.";
+// MES ACHATS
+function displayPurchases(){
+ const box=document.getElementById('purchaseList');
+ box.innerHTML='';
+
+ const mine=contents.filter(x=>purchases.includes(x.id));
+
+ if(!mine.length){
+  box.innerHTML='<p>Vous n’avez pas encore acheté de contenu.</p>';
+  return;
+ }
+
+ mine.forEach(item=>{
+  const card=document.createElement('div');
+  card.className='card';
+
+  const title=document.createElement('h3');
+  title.textContent=item.title;
+
+  const button=document.createElement('button');
+  button.className='gold';
+  button.textContent='Ouvrir le contenu';
+  button.onclick=()=>{
+   selectedItem=item;
+   openPurchasedLink();
+  };
+
+  card.append(title,button);
+  box.appendChild(card);
+ });
 }
 
-function notify(){
-  document.getElementById("settingsMessage").textContent=
-    "Les notifications seront activées lorsque le site aura un serveur et un service de notifications.";
+// ADMINISTRATION
+function addItem(){
+ const title=document.getElementById('adminTitle').value.trim();
+ const description=document.getElementById('adminDescription').value.trim();
+ const category=document.getElementById('adminCategory').value;
+ const price=Number(document.getElementById('adminPrice').value);
+ const preview=document.getElementById('adminPreview').value.trim();
+ const link=document.getElementById('adminLink').value.trim();
+
+ if(!title || !description || !Number.isFinite(price) || price<0 || !link){
+  alert('Ajoutez le titre, la description, un prix valide et le lien YouTube.');
+  return;
+ }
+
+ if(!youtubeId(link)){
+  alert('Le lien complet doit être un lien YouTube valide.');
+  return;
+ }
+
+ if(preview && !youtubeId(preview)){
+  alert('Vérifiez le lien YouTube de l’extrait.');
+  return;
+ }
+
+ contents.push({
+  id:Date.now(),
+  title,description,category,price,preview,link
+ });
+
+ saveData();
+
+ document.getElementById('adminTitle').value='';
+ document.getElementById('adminDescription').value='';
+ document.getElementById('adminPrice').value='';
+ document.getElementById('adminPreview').value='';
+ document.getElementById('adminLink').value='';
+
+ displayAdmin();
+ alert('Contenu ajouté au catalogue.');
 }
 
-const savedLanguage=localStorage.getItem("swLanguage");
-if(savedLanguage)document.getElementById("language").value=savedLanguage;
+function displayAdmin(){
+ const box=document.getElementById('adminList');
+ box.innerHTML='';
 
-render();
+ contents.forEach(item=>{
+  const card=document.createElement('div');
+  card.className='card';
+
+  const title=document.createElement('strong');
+  title.textContent=item.title+' — $'+item.price;
+
+  const del=document.createElement('button');
+  del.className='dark';
+  del.textContent='Supprimer';
+  del.style.width='100%';
+  del.onclick=()=>{
+   if(confirm('Supprimer ce contenu ?')){
+    contents=contents.filter(x=>x.id!==item.id);
+    purchases=purchases.filter(x=>x!==item.id);
+    saveData();
+    displayAdmin();
+   }
+  };
+
+  card.append(title,del);
+  box.appendChild(card);
+ });
+}
+
+// DÉMARRAGE
+updateProfile();
 </script>
-</body>
+
+</body><script type="module">
+  // Import the functions you need from the SDKs you need
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/13.2.0/firebase-app.js";
+  import { getAnalytics } from "https://www.gstatic.com/firebasejs/13.2.0/firebase-analytics.js";
+  // TODO: Add SDKs for Firebase products that you want to use
+  // https://firebase.google.com/docs/web/setup#available-libraries
+
+  // Your web app's Firebase configuration
+  // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+  const firebaseConfig = {
+    apiKey: "AIzaSyCdCD8u2fHiLZxQQRqyItgZxFG-Xin0mJk",
+    authDomain: "swahilistream-6c403.firebaseapp.com",
+    projectId: "swahilistream-6c403",
+    storageBucket: "swahilistream-6c403.firebasestorage.app",
+    messagingSenderId: "665440770367",
+    appId: "1:665440770367:web:108f163c651ab9443cdb8a",
+    measurementId: "G-T14YZ7XKKZ"
+  };
+
+  // Initialize Firebase
+  const app = initializeApp(firebaseConfig);
+  const analytics = getAnalytics(app);
+</script>
+
 </html>
 
