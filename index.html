@@ -5,1687 +5,337 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>MaVideo</title>
-
+<title>SWAHILI STREAM</title>
 <style>
-* {
-  box-sizing: border-box;
-}
-
-body {
-  margin: 0;
-  background: #080808;
-  color: white;
-  font-family: Arial, sans-serif;
-}
-
-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 16px;
-  background: #111;
-}
-
-.logo {
-  font-size: 25px;
-  font-weight: bold;
-  color: #ff1744;
-}
-
-header span {
-  font-size: 13px;
-  color: #aaa;
-}
-
-.tabs {
-  display: flex;
-  justify-content: center;
-  gap: 25px;
-  padding: 15px;
-  background: #111;
-}
-
-.tabs button {
-  background: none;
-  border: none;
-  color: white;
-  font-size: 16px;
-}
-
-.tabs button.active {
-  color: #ff1744;
-  font-weight: bold;
-}
-
-#feed {
-  padding-bottom: 85px;
-}
-
-.video-card {
-  position: relative;
-  margin: 12px;
-  height: 470px;
-  background: #202020;
-  border-radius: 15px;
-  overflow: hidden;
-}
-
-.video-card video {
-  width: 100%;
-  height: 100%;
-  object-fit: contain;
-  background: black;
-}
-
-.empty {
-  display: flex;
-  height: 100%;
-  align-items: center;
-  justify-content: center;
-  flex-direction: column;
-  color: #ccc;
-  text-align: center;
-  padding: 20px;
-}
-
-.video-info {
-  position: absolute;
-  bottom: 15px;
-  left: 15px;
-  right: 75px;
-  text-shadow: 1px 1px 4px black;
-}
-
-.actions {
-  position: absolute;
-  right: 12px;
-  bottom: 30px;
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-}
-
-.actions button {
-  background: #222b;
-  border: none;
-  border-radius: 50%;
-  color: white;
-  width: 48px;
-  height: 48px;
-  font-size: 23px;
-}
-
-.actions button.liked {
-  color: #ff1744;
-}
-
-.bottom {
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  height: 65px;
-  display: flex;
-  justify-content: space-around;
-  align-items: center;
-  background: #111;
-  border-top: 1px solid #333;
-}
-
-.bottom button {
-  background: none;
-  border: none;
-  color: white;
-  font-size: 13px;
-}
-
-.bottom button strong {
-  display: block;
-  font-size: 22px;
-  margin-bottom: 4px;
-}
-
-#upload {
-  display: none;
-}
-
-#profile {
-  display: none;
-  padding: 35px 20px;
-  text-align: center;
-}
-
-.add {
-  background: #ff1744;
-  color: white;
-  border: none;
-  border-radius: 10px;
-  padding: 13px 20px;
-  font-size: 16px;
-  margin-top: 15px;
-}
-
+*{box-sizing:border-box}
+body{margin:0;background:#101018;color:white;font-family:Arial,sans-serif}
+header{background:#191927;padding:18px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px}
+.logo{color:#ffb000;font-size:23px;font-weight:bold}
+nav{display:flex;gap:8px;flex-wrap:wrap}
+button{border:0;border-radius:8px;padding:11px 14px;background:#ffb000;color:#171717;font-weight:bold;cursor:pointer}
+button.secondary{background:#333344;color:white}
+input,textarea,select{width:100%;padding:12px;margin:7px 0 14px;border:1px solid #444;border-radius:8px;background:#20202e;color:white}
+main{padding:18px;max-width:1100px;margin:auto}
+section{display:none}
+section.active{display:block}
+.hero{background:linear-gradient(120deg,#382044,#171727);padding:35px 20px;border-radius:15px;margin-bottom:20px}
+.hero h1{font-size:32px}
+h2{color:#ffb000}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(155px,1fr));gap:15px}
+.movie{background:#20202e;border-radius:12px;overflow:hidden}
+.movie img{width:100%;height:210px;object-fit:cover;background:#333}
+.movie .info{padding:12px}
+.movie h3{margin:5px 0}
+small{color:#bbb}
+.panel{background:#20202e;padding:18px;border-radius:12px;margin:15px 0}
+.hidden{display:none!important}
+footer{text-align:center;padding:25px;color:#aaa}
+video{width:100%;max-height:450px;background:#000;border-radius:12px}
 </style>
 </head>
-
 <body>
 
 <header>
-  <div class="logo">MaVideo 🔴</div>
-  <span>Découvre les vidéos</span>
+  <div class="logo">SWAHILI STREAM</div>
+  <nav>
+    <button onclick="show('home')">Accueil</button>
+    <button onclick="show('catalog')">Catalogue</button>
+    <button onclick="show('premium')">Premium</button>
+    <button onclick="show('account')">Mon compte</button>
+    <button onclick="show('admin')">Administration</button>
+    <button class="secondary" onclick="show('settings')">Paramètres</button>
+  </nav>
 </header>
 
-<div class="tabs">
-  <button class="active">Pour toi</button>
-  <button onclick="alert('La section Abonnements arrive bientôt !')">
-    Abonnements
-  </button>
-</div>
+<main>
 
-<main id="feed">
-
-  <div id="empty" class="video-card">
-    <div class="empty">
-      <h1>Bienvenue ! 🎬</h1>
-      <p>Ton application vidéo commence ici.</p>
-      <p>Ajoute ta première vidéo pour commencer.</p>
-      <button class="add" onclick="document.getElementById('upload').click()">
-        + Ajouter une vidéo
-      </button>
-    </div>
+<section id="home" class="active">
+  <div class="hero">
+    <h1>Bienvenue sur SWAHILI STREAM</h1>
+    <p>Découvre des films et des séries en swahili, français et anglais.</p>
+    <button onclick="show('catalog')">Découvrir les films</button>
   </div>
+  <h2>Nos programmes</h2>
+  <div class="grid" id="homeMovies"></div>
+</section>
+
+<section id="catalog">
+  <h2>Catalogue des films et séries</h2>
+  <input id="search" placeholder="Rechercher un film ou une série..." oninput="render()">
+  <div class="grid" id="movies"></div>
+</section>
+
+<section id="watch">
+  <button class="secondary" onclick="show('catalog')">← Retour au catalogue</button>
+  <div class="panel">
+    <h2 id="watchTitle"></h2>
+    <p id="watchDescription"></p>
+    <video id="player" controls playsinline></video>
+    <p id="videoMessage">Si la vidéo ne démarre pas, vérifie son adresse.</p>
+  </div>
+</section>
+
+<section id="account">
+  <h2>Mon compte</h2>
+  <div class="panel">
+    <h3>Créer un compte ou se connecter</h3>
+    <label>Adresse e-mail</label>
+    <input id="email" type="email" placeholder="Ton adresse e-mail">
+    <label>Mot de passe (démo uniquement)</label>
+    <input id="password" type="password" placeholder="Mot de passe">
+    <button onclick="login()">Entrer / Créer un compte démo</button>
+    <p id="accountMessage"></p>
+    <button class="secondary" onclick="logout()">Se déconnecter</button>
+  </div>
+</section>
+
+<section id="premium">
+  <h2>Abonnement Premium</h2>
+  <div class="panel">
+    <h1>10 USD / mois</h1>
+    <p>Accès Premium à notre catalogue, selon les droits de diffusion.</p>
+    <p>Choisis un moyen de paiement :</p>
+    <select id="payment">
+      <option>M-Pesa</option>
+      <option>Airtel Money</option>
+      <option>Orange Money</option>
+      <option>Visa / Mastercard</option>
+    </select>
+    <button onclick="paymentDemo()">Continuer</button>
+    <p id="paymentMessage"></p>
+    <small>Démo : aucun argent ne sera prélevé. Le paiement réel n'est pas encore connecté.</small>
+  </div>
+</section>
+
+<section id="admin">
+  <h2>Administration</h2>
+  <div class="panel">
+    <h3>Ajouter un film ou une série</h3>
+    <label>Titre</label>
+    <input id="newTitle" placeholder="Nom du programme">
+    <label>Type</label>
+    <select id="newType">
+      <option>Film</option>
+      <option>Série</option>
+    </select>
+    <label>Langue</label>
+    <select id="newLanguage">
+      <option>Swahili</option>
+      <option>Français</option>
+      <option>Anglais</option>
+    </select>
+    <label>Description</label>
+    <textarea id="newDescription" placeholder="Description du programme"></textarea>
+    <label>Adresse de l'affiche (URL)</label>
+    <input id="newPoster" placeholder="https://exemple.com/affiche.jpg">
+    <label>Adresse de la vidéo (URL MP4)</label>
+    <input id="newVideo" placeholder="https://exemple.com/video.mp4">
+    <button onclick="addMovie()">Ajouter au catalogue</button>
+    <p id="adminMessage"></p>
+  </div>
+
+  <div class="panel">
+    <h3>Gérer les programmes</h3>
+    <div id="adminMovies"></div>
+  </div>
+  <small>Cette administration de démonstration n'est pas protégée. Ne l'utilise pas pour gérer un vrai site public.</small>
+</section>
+
+<section id="settings">
+  <h2>Paramètres</h2>
+  <div class="panel">
+    <label>Langue de préférence</label>
+    <select id="language" onchange="saveLanguage()">
+      <option>Français</option>
+      <option>Swahili</option>
+      <option>English</option>
+    </select>
+    <button onclick="notify()">Tester les notifications</button>
+    <p id="settingsMessage"></p>
+  </div>
+</section>
 
 </main>
 
-<section id="profile">
-  <h1>👤 Mon profil</h1>
-
-  <div class="profile-card">
-    <img id="profilePhoto"
-      src="https://placehold.co/120x120/222/fff?text=Photo"
-      alt="Photo de profil">
-
-    <h2 id="profileName">MonProfil</h2>
-    <p id="profileEmail">Pas encore inscrit</p>
-
-    <label for="photoInput">📷 Changer ma photo</label>
-    <input type="file" id="photoInput"
-      accept="image/*" onchange="changePhoto(event)">
-
-    <button onclick="registerUser()">Créer mon compte</button>
-  </div>
-
-  <p>🎬 Mes vidéos</p>
-  <p id="myVideos">0 vidéo publiée</p>
-</section>
-
-<input
-  type="file"
-  id="upload"
-  accept="video/*"
-  onchange="addVideo(event)"
->
-
-<nav class="bottom">
-  <button onclick="showFeed()">
-    <strong>⌂</strong>Accueil
-  </button>
-
-  <button onclick="document.getElementById('upload').click()">
-    <strong>＋</strong>Ajouter
-  </button>
-
-  <button onclick="showProfile()">
-    <strong>👤</strong>Profil
-  </button>
-</nav>
+<footer>
+  SWAHILI STREAM © 2026 — Films et séries avec autorisation de diffusion.
+</footer>
 
 <script>
+const initialMovies = [
+  {
+    id:1,
+    title:"Exemple de série swahili",
+    type:"Série",
+    language:"Swahili",
+    description:"Exemple de présentation. Remplace ce programme par une vidéo que tu as le droit de diffuser.",
+    poster:"",
+    video:""
+  },
+  {
+    id:2,
+    title:"Exemple de film",
+    type:"Film",
+    language:"Français",
+    description:"Voici un exemple de film dans le catalogue.",
+    poster:"",
+    video:""
+  }
+];
 
-let videoCount = 0;
+let movies = JSON.parse(localStorage.getItem("swMovies") || "null") || initialMovies;
+let currentUser = localStorage.getItem("swUser") || "";
 
-function showFeed() {
-  document.getElementById("feed").style.display = "block";
-  document.getElementById("profile").style.display = "none";
+function save(){
+  localStorage.setItem("swMovies",JSON.stringify(movies));
 }
 
-function showProfile() {
-  document.getElementById("feed").style.display = "none";
-  document.getElementById("profile").style.display = "block";
+function show(id){
+  document.querySelectorAll("main section").forEach(s=>s.classList.remove("active"));
+  document.getElementById(id).classList.add("active");
+  if(id==="catalog" || id==="home" || id==="admin") render();
 }
 
-function addVideo(event) {
-  const file = event.target.files[0];
+function render(){
+  const query=(document.getElementById("search")?.value || "").toLowerCase();
+  const filtered=movies.filter(m=>
+    m.title.toLowerCase().includes(query) ||
+    m.language.toLowerCase().includes(query)
+  );
 
-  if (!file) return;
+  const cards=filtered.map(m=>`
+    <div class="movie">
+      <img src="${safe(m.poster)}" alt="Affiche de ${safe(m.title)}"
+        onerror="this.style.background='#333';this.removeAttribute('src')">
+      <div class="info">
+        <h3>${safe(m.title)}</h3>
+        <small>${safe(m.type)} • ${safe(m.language)}</small>
+        <p>${safe(m.description)}</p>
+        <button onclick="watchMovie(${m.id})">Voir</button>
+      </div>
+    </div>
+  `).join("");
 
-  if (!file.type.startsWith("video/")) {
-    alert("Choisis un fichier vidéo.");
+  document.getElementById("movies").innerHTML=cards || "<p>Aucun programme trouvé.</p>";
+  document.getElementById("homeMovies").innerHTML=cards;
+
+  document.getElementById("adminMovies").innerHTML=movies.map(m=>`
+    <div class="panel">
+      <b>${safe(m.title)}</b>
+      <button class="secondary" onclick="deleteMovie(${m.id})">Supprimer</button>
+    </div>
+  `).join("");
+}
+
+function safe(value){
+  return String(value || "").replace(/[&<>"']/g,c=>({
+    "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"
+  }[c]));
+}
+
+function watchMovie(id){
+  const m=movies.find(x=>x.id===id);
+  if(!m)return;
+  document.getElementById("watchTitle").textContent=m.title;
+  document.getElementById("watchDescription").textContent=m.description;
+  const player=document.getElementById("player");
+  player.pause();
+  player.src=m.video || "";
+  player.load();
+  document.getElementById("videoMessage").textContent=
+    m.video ? "Vidéo chargée." : "Aucune vidéo n'a encore été ajoutée.";
+  show("watch");
+}
+
+function addMovie(){
+  const title=document.getElementById("newTitle").value.trim();
+  const description=document.getElementById("newDescription").value.trim();
+  const video=document.getElementById("newVideo").value.trim();
+  const poster=document.getElementById("newPoster").value.trim();
+
+  if(!title){
+    alert("Écris le titre du programme.");
     return;
   }
 
-  const url = URL.createObjectURL(file);
+  if(video && !/^https:\/\//i.test(video)){
+    alert("Utilise une adresse vidéo HTTPS.");
+    return;
+  }
+  if(poster && !/^https:\/\//i.test(poster)){
+    alert("Utilise une adresse d'affiche HTTPS.");
+    return;
+  }
 
-  document.getElementById("empty")?.remove();
+  movies.unshift({
+    id:Date.now(),
+    title:title,
+    type:document.getElementById("newType").value,
+    language:document.getElementById("newLanguage").value,
+    description:description,
+    poster:poster,
+    video:video
+  });
 
-  const card = document.createElement("div");
-  card.className = "video-card";
-
-  const video = document.createElement("video");
-  video.src = url;
-  video.controls = true;
-  video.playsInline = true;
-
-  const info = document.createElement("div");
-  info.className = "video-info";
-  info.innerHTML = "<b>@MonProfil</b><p>Ma première vidéo 🎬</p>";
-
-  const actions = document.createElement("div");
-  actions.className = "actions";
-
-  const like = document.createElement("button");
-  like.innerHTML = "♡";
-  let liked = false;
-  let likes = 0;
-
-  like.onclick = () => {
-    liked = !liked;
-    likes += liked ? 1 : -1;
-    like.classList.toggle("liked", liked);
-    like.innerHTML = liked ? "♥" : "♡";
-  };
-
-  const comment = document.createElement("button");
-  comment.innerHTML = "💬";
-  comment.onclick = () => {
-    const message = prompt("Écris ton commentaire :");
-    if (message) alert("Commentaire ajouté : " + message);
-  };
-
-  const share = document.createElement("button");
-  share.innerHTML = "↗";
-  share.onclick = async () => {
-    if (navigator.share) {
-      try {
-        await navigator.share({
-          title: "video",
-          text: "Regarde ma vidéo !"
-        });
-      } catch (error) {}
-    } else {
-      alert("Partage disponible sur ton téléphone.");
-    }
-  };
-
-  actions.append(like, comment, share);
-  card.append(video, info, actions);
-
-  document.getElementById("feed").prepend(card);
-
-  videoCount++;
-  event.target.value = "";
+  save();
+  render();
+  document.getElementById("adminMessage").textContent="Programme ajouté !";
+  ["newTitle","newDescription","newVideo","newPoster"].forEach(id=>{
+    document.getElementById(id).value="";
+  });
 }
 
+function deleteMovie(id){
+  if(!confirm("Supprimer ce programme ?"))return;
+  movies=movies.filter(m=>m.id!==id);
+  save();
+  render();
+}
 
-// =====================================
-// MADRONE VIDEO LUBUMBAY - AMELIORATION
-// =====================================
+function login(){
+  const email=document.getElementById("email").value.trim();
+  const password=document.getElementById("password").value;
 
-(function () {
-  const feed = document.getElementById("feed");
-  if (!feed) return;
-
-  // STYLE PROFESSIONNEL
-  const style = document.createElement("style");
-  style.textContent = `
-    .madrone-tools {
-      padding: 15px;
-      margin: 12px;
-      border-radius: 18px;
-      background: linear-gradient(135deg,#101c35,#173c68);
-      color: white;
-      box-shadow: 0 5px 20px #0003;
-    }
-
-    .madrone-tools input {
-      width: 100%;
-      box-sizing: border-box;
-      padding: 14px;
-      border: 0;
-      border-radius: 12px;
-      outline: none;
-      font-size: 16px;
-      margin-top: 10px;
-    }
-
-    .madrone-tools button {
-      border: 0;
-      padding: 11px 15px;
-      margin: 8px 5px 0 0;
-      border-radius: 10px;
-      background: #168cff;
-      color: white;
-      font-weight: bold;
-    }
-
-    .madrone-dark {
-      background: #10131c !important;
-      color: white !important;
-    }
-
-    .madrone-dark .madrone-tools {
-      background: #202b40;
-    }
-
-    #madroneTop {
-      position: fixed;
-      bottom: 25px;
-      right: 18px;
-      z-index: 9999;
-      border: 0;
-      border-radius: 50%;
-      width: 52px;
-      height: 52px;
-      background: #087cff;
-      color: white;
-      font-size: 24px;
-      box-shadow: 0 4px 15px #0005;
-    }
-
-    .madrone-count {
-      font-size: 13px;
-      opacity: .85;
-      margin-top: 10px;
-    }
-  `;
-  document.head.appendChild(style);
-
-  // BARRE DE RECHERCHE
-  const tools = document.createElement("div");
-  tools.className = "madrone-tools";
-
-  tools.innerHTML = `
-    <h3>🎬 MADRONE VIDEO</h3>
-    <p>Découvrez vos vidéos préférées</p>
-    <input id="madroneSearch"
-      type="search"
-      placeholder="🔍 Rechercher une vidéo...">
-
-    <button id="madroneDark">🌙 Mode sombre</button>
-    <button id="madroneRefresh">🔄 Actualiser</button>
-
-    <div class="madrone-count" id="madroneCount"></div>
-  `;
-
-  feed.parentNode.insertBefore(tools, feed);
-
-  // RECHERCHE DES VIDEOS
-  const search = document.getElementById("madroneSearch");
-  const count = document.getElementById("madroneCount");
-
-  function searchVideos() {
-    const query = search.value.toLowerCase().trim();
-    const cards = Array.from(feed.children);
-    let visible = 0;
-
-    cards.forEach(card => {
-      const match = card.innerText.toLowerCase().includes(query);
-      card.style.display = match ? "" : "none";
-      if (match) visible++;
-    });
-
-    count.textContent =
-      visible + " vidéo(s) trouvée(s)";
+  if(!email || !password){
+    document.getElementById("accountMessage").textContent="Remplis les deux champs.";
+    return;
   }
 
-  search.addEventListener("input", searchVideos);
-
-  // MODE SOMBRE
-  document.getElementById("madroneDark")
-    .addEventListener("click", function () {
-      document.body.classList.toggle("madrone-dark");
-
-      this.textContent =
-        document.body.classList.contains("madrone-dark")
-        ? "☀️ Mode clair"
-        : "🌙 Mode sombre";
-    });
-
-  // ACTUALISATION DE L'AFFICHAGE
-  document.getElementById("madroneRefresh")
-    .addEventListener("click", function () {
-      search.value = "";
-      searchVideos();
-    });
-
-  // BOUTON RETOUR EN HAUT
-  const top = document.createElement("button");
-  top.id = "madroneTop";
-  top.textContent = "↑";
-  top.title = "Retour en haut";
-
-  top.addEventListener("click", function () {
-    window.scrollTo({
-      top: 0,
-      behavior: "smooth"
-    });
-  });
-
-  document.body.appendChild(top);
-
-  searchVideos();
-
-  console.log("MADRONE VIDEO : améliorations activées !");
-})();
-
-
-
-// ========================================
-// MADRONE VIDEO LUBUMBAY - FUTURE 2030
-// ECRAN DE DEMARRAGE CINEMATIQUE
-// ========================================
-
-(function () {
-  if (document.getElementById("madroneSplash")) return;
-
-  const style = document.createElement("style");
-
-  style.textContent = `
-    #madroneSplash {
-      position: fixed;
-      inset: 0;
-      z-index: 999999;
-      overflow: hidden;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      background:
-        radial-gradient(ellipse at 50% 40%,
-        #122e59 0%, #080b20 48%, #02030a 100%);
-      color: white;
-      font-family: Arial, sans-serif;
-      animation: madroneAppear 1s ease;
-    }
-
-    .md-stars {
-      position: absolute;
-      inset: 0;
-      background-image:
-        radial-gradient(#00eaff 1px,transparent 2px),
-        radial-gradient(#ff20d5 1px,transparent 2px);
-      background-size: 65px 65px, 95px 95px;
-      animation: mdStars 12s linear infinite;
-      opacity: .55;
-    }
-
-    .md-orbit {
-      position: absolute;
-      width: 290px;
-      height: 290px;
-      border: 2px solid transparent;
-      border-top-color: #00eaff;
-      border-bottom-color: #ed20ff;
-      border-radius: 50%;
-      box-shadow: 0 0 25px #00dfff;
-      animation: mdSpin 4s linear infinite;
-    }
-
-    .md-logo {
-      position: relative;
-      z-index: 2;
-      text-align: center;
-      animation: mdFloat 3s ease-in-out infinite;
-    }
-
-    .md-icon {
-      font-size: 75px;
-      filter: drop-shadow(0 0 15px #00eaff);
-      margin-bottom: 20px;
-      animation: mdPulse 1.5s infinite;
-    }
-
-    .md-name {
-      font-size: clamp(30px, 9vw, 48px);
-      font-weight: 1000;
-      letter-spacing: 2px;
-      background: linear-gradient(
-        90deg,#fff,#00eaff,#ff30d9,#fff
-      );
-      background-size: 250%;
-      color: transparent;
-      background-clip: text;
-      -webkit-background-clip: text;
-      animation: mdColor 4s linear infinite;
-      text-shadow: 0 0 25px #00dfff66;
-    }
-
-    .md-city {
-      color: #ffc94b;
-      font-weight: 900;
-      letter-spacing: 7px;
-      margin-top: 12px;
-      font-size: 19px;
-      text-shadow: 0 0 15px #ffb900;
-    }
-
-    .md-tagline {
-      margin-top: 25px;
-      font-size: 13px;
-      color: #c8eaff;
-      letter-spacing: 2px;
-    }
-
-    .md-loader {
-      position: relative;
-      z-index: 3;
-      width: 75%;
-      max-width: 300px;
-      height: 9px;
-      margin-top: 48px;
-      border-radius: 20px;
-      background: #26334c;
-      overflow: hidden;
-      box-shadow: 0 0 15px #00eaff55;
-    }
-
-    .md-progress {
-      width: 0%;
-      height: 100%;
-      background: linear-gradient(
-        90deg,#00eaff,#a020ff,#ff20ce
-      );
-      box-shadow: 0 0 20px #00eaff;
-      animation: mdLoading 3.2s ease forwards;
-    }
-
-    .md-status {
-      position: relative;
-      z-index: 2;
-      margin-top: 18px;
-      font-size: 12px;
-      color: #8ceaff;
-      letter-spacing: 2px;
-    }
-
-    .md-version {
-      position: absolute;
-      bottom: 25px;
-      font-size: 11px;
-      color: #7189b5;
-      letter-spacing: 3px;
-    }
-
-    @keyframes mdSpin {
-      to { transform: rotate(360deg); }
-    }
-
-    @keyframes mdFloat {
-      50% { transform: translateY(-12px); }
-    }
-
-    @keyframes mdPulse {
-      50% {
-        transform: scale(1.12);
-        filter: drop-shadow(0 0 30px #ff20d9);
-      }
-    }
-
-    @keyframes mdColor {
-      to { background-position: 250%; }
-    }
-
-    @keyframes mdStars {
-      to { background-position: 300px 500px; }
-    }
-
-    @keyframes mdLoading {
-      to { width: 100%; }
-    }
-
-    @keyframes madroneAppear {
-      from { opacity: 0; }
-      to { opacity: 1; }
-    }
-  `;
-
-  document.head.appendChild(style);
-
-  const splash = document.createElement("div");
-  splash.id = "madroneSplash";
-
-  splash.innerHTML = `
-    <div class="md-stars"></div>
-    <div class="md-orbit"></div>
-
-    <div class="md-logo">
-      <div class="md-icon">👑 ▶</div>
-      <div class="md-name">MADRONE VIDEO</div>
-      <div class="md-city">LUBUMBAY</div>
-      <div class="md-tagline">
-        LE FUTUR DU DIVERTISSEMENT
-      </div>
-    </div>
-
-    <div class="md-loader">
-      <div class="md-progress"></div>
-    </div>
-
-    <div class="md-status">
-      INITIALISATION DE L'UNIVERS MADRONE...
-    </div>
-
-    <div class="md-version">
-      FUTURE EXPERIENCE • EDITION 2030
-    </div>
-  `;
-
-  document.body.appendChild(splash);
-
-  setTimeout(() => {
-    splash.style.transition = "opacity 1s ease";
-    splash.style.opacity = "0";
-
-    setTimeout(() => {
-      splash.remove();
-      style.remove();
-    }, 1000);
-
-  }, 3200);
-
-})();
-
-
-
-// ==========================================
-// MADRONE VIDEO 2030 - VIDEO FEED
-// STYLE RESEAU SOCIAL PLEIN ECRAN
-// ==========================================
-
-(function () {
-  const feed = document.getElementById("feed");
-  if (!feed) return;
-
-  const style = document.createElement("style");
-
-  style.textContent = `
-    #feed {
-      width: 100%;
-      height: 100vh;
-      overflow-y: auto;
-      scroll-snap-type: y mandatory;
-      background: #000;
-      scrollbar-width: none;
-    }
-
-    #feed::-webkit-scrollbar {
-      display: none;
-    }
-
-    .md-feed-card {
-      position: relative !important;
-      width: 100% !important;
-      height: 100vh !important;
-      min-height: 100vh !important;
-      overflow: hidden !important;
-      scroll-snap-align: start;
-      background: #050505 !important;
-      margin: 0 !important;
-      border: 0 !important;
-      border-radius: 0 !important;
-    }
-
-    .md-feed-video {
-      position: absolute;
-      inset: 0;
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      background: #000;
-    }
-
-    .md-feed-info {
-      position: absolute !important;
-      z-index: 3;
-      bottom: 35px;
-      left: 15px;
-      right: 85px;
-      color: white !important;
-      text-shadow: 0 2px 8px #000;
-      pointer-events: none;
-    }
-
-    .md-feed-actions {
-      position: absolute !important;
-      z-index: 4;
-      right: 12px;
-      bottom: 100px;
-      display: flex;
-      flex-direction: column;
-      gap: 18px;
-      align-items: center;
-    }
-
-    .md-feed-actions button {
-      min-width: 48px;
-      min-height: 45px;
-      border: 0;
-      border-radius: 15px;
-      color: white;
-      background: #17243ab8;
-      font-size: 21px;
-      box-shadow: 0 0 12px #00cfff55;
-    }
-
-    .md-feed-card::after {
-      content: "";
-      position: absolute;
-      inset: 50% 0 0;
-      z-index: 1;
-      pointer-events: none;
-      background: linear-gradient(
-        transparent,
-        #000000b8
-      );
-    }
-
-    .md-feed-info,
-    .md-feed-actions {
-      isolation: isolate;
-    }
-  `;
-
-  document.head.appendChild(style);
-
-  function prepareCard(card) {
-    if (card.dataset.mdPrepared) return;
-
-    card.dataset.mdPrepared = "1";
-    card.classList.add("md-feed-card");
-
-    const video = card.querySelector("video");
-
-    if (video) {
-      video.classList.add("md-feed-video");
-      video.muted = true;
-      video.playsInline = true;
-      video.setAttribute("playsinline", "");
-      video.setAttribute("webkit-playsinline", "");
-    }
-
-    if (card.children[1]) {
-      card.children[1].classList.add("md-feed-info");
-    }
-
-    if (card.children[2]) {
-      card.children[2].classList.add("md-feed-actions");
-    }
-  }
-
-  Array.from(feed.children).forEach(prepareCard);
-
-  const observer = new IntersectionObserver(entries => {
-    entries.forEach(entry => {
-      const video = entry.target.querySelector("video");
-
-      if (!video) return;
-
-      if (entry.isIntersecting && entry.intersectionRatio >= 0.65) {
-        video.play().catch(() => {});
-      } else {
-        video.pause();
-      }
-    });
-  }, {
-    threshold: [0, 0.65, 1]
-  });
-
-  function watchCard(card) {
-    prepareCard(card);
-    observer.observe(card);
-  }
-
-  Array.from(feed.children).forEach(watchCard);
-
-  const mutations = new MutationObserver(records => {
-    records.forEach(record => {
-      record.addedNodes.forEach(node => {
-        if (node.nodeType === 1 && node.parentNode === feed) {
-          watchCard(node);
-        }
-      });
-    });
-  });
-
-  mutations.observe(feed, {
-    childList: true
-  });
-
-  console.log("MADRONE VIDEO 2030 : VIDEO FEED ACTIVE");
-})();
-
-
-
-/* =====================================
-   MADRONE VIDEO 2030 - USER PROFILE
-===================================== */
-
-(function () {
-  if (document.getElementById("mdProfileButton")) return;
-
-  const css = document.createElement("style");
-
-  css.textContent = `
-    #mdProfileButton {
-      position: fixed;
-      bottom: 85px;
-      left: 15px;
-      z-index: 99990;
-      width: 55px;
-      height: 55px;
-      border-radius: 50%;
-      border: 2px solid #00eaff;
-      background: linear-gradient(135deg,#071d45,#8d16c9);
-      color: white;
-      font-size: 25px;
-      box-shadow: 0 0 20px #00cfff;
-    }
-
-    #mdProfile {
-      position: fixed;
-      inset: 0;
-      z-index: 999999;
-      display: none;
-      overflow-y: auto;
-      background: #070b18;
-      color: white;
-      font-family: Arial,sans-serif;
-      padding: 20px;
-      box-sizing: border-box;
-    }
-
-    .mdp-header {
-      display:flex;
-      justify-content:space-between;
-      align-items:center;
-    }
-
-    .mdp-close {
-      background:#202d4b;
-      color:white;
-      border:0;
-      border-radius:12px;
-      padding:12px;
-      font-size:20px;
-    }
-
-    .mdp-avatar {
-      width:110px;
-      height:110px;
-      border-radius:50%;
-      border:4px solid #00dfff;
-      background:linear-gradient(135deg,#006aff,#b000ff);
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      margin:35px auto 15px;
-      font-size:45px;
-      overflow:hidden;
-      box-shadow:0 0 25px #00dfff;
-    }
-
-    .mdp-avatar img {
-      width:100%;
-      height:100%;
-      object-fit:cover;
-    }
-
-    .mdp-name {
-      text-align:center;
-      font-size:25px;
-      font-weight:900;
-    }
-
-    .mdp-bio {
-      text-align:center;
-      color:#aabbdc;
-      margin:12px;
-    }
-
-    .mdp-stats {
-      display:grid;
-      grid-template-columns:repeat(3,1fr);
-      gap:8px;
-      margin:30px 0;
-    }
-
-    .mdp-stat {
-      background:#14213c;
-      border:1px solid #244c80;
-      border-radius:15px;
-      padding:17px 5px;
-      text-align:center;
-    }
-
-    .mdp-stat strong {
-      display:block;
-      color:#00eaff;
-      font-size:23px;
-    }
-
-    .mdp-edit {
-      width:100%;
-      padding:15px;
-      margin-top:12px;
-      border:0;
-      border-radius:13px;
-      color:white;
-      font-weight:bold;
-      background:linear-gradient(90deg,#087cff,#9c20ff);
-    }
-
-    .mdp-input {
-      width:100%;
-      box-sizing:border-box;
-      padding:14px;
-      margin:8px 0;
-      border:1px solid #284d79;
-      border-radius:10px;
-      background:#101c32;
-      color:white;
-    }
-
-    .mdp-section {
-      margin-top:25px;
-      padding:18px;
-      border-radius:17px;
-      background:#101a30;
-    }
-  `;
-
-  document.head.appendChild(css);
-
-  const button = document.createElement("button");
-  button.id = "mdProfileButton";
-  button.textContent = "👤";
-  button.title = "Mon profil";
-  document.body.appendChild(button);
-
-  const panel = document.createElement("div");
-  panel.id = "mdProfile";
-
-  panel.innerHTML = `
-    <div class="mdp-header">
-      <strong>👑 MADRONE VIDEO</strong>
-      <button class="mdp-close" id="mdpClose">✕</button>
-    </div>
-
-    <div class="mdp-avatar" id="mdpAvatar">👤</div>
-
-    <div class="mdp-name" id="mdpName"></div>
-    <div class="mdp-bio" id="mdpBio"></div>
-
-    <div class="mdp-stats">
-      <div class="mdp-stat">
-        <strong id="mdpVideos">0</strong>
-        Vidéos
-      </div>
-      <div class="mdp-stat">
-        <strong>0</strong>
-        Abonnés
-      </div>
-      <div class="mdp-stat">
-        <strong>0</strong>
-        Abonnements
-      </div>
-    </div>
-
-    <button class="mdp-edit" id="mdpEdit">
-      ✨ MODIFIER MON PROFIL
-    </button>
-
-    <div class="mdp-section" id="mdpForm" style="display:none">
-      <h3>Personnaliser mon profil</h3>
-
-      <label>Nom d'utilisateur</label>
-      <input class="mdp-input" id="mdpNameInput"
-        placeholder="Ton nom">
-
-      <label>Biographie</label>
-      <textarea class="mdp-input" id="mdpBioInput"
-        placeholder="Présente-toi..."></textarea>
-
-      <label>Photo de profil</label>
-      <input class="mdp-input" type="file"
-        id="mdpPhoto" accept="image/*">
-
-      <button class="mdp-edit" id="mdpSave">
-        💾 ENREGISTRER
-      </button>
-    </div>
-
-    <div class="mdp-section">
-      <h3>🎬 Mes publications</h3>
-      <p>Retrouve ici tes vidéos publiées.</p>
-      <p style="color:#8ca8ce">
-        Ton espace personnel MADRONE VIDEO.
-      </p>
-    </div>
-
-    <p style="text-align:center;color:#7186aa">
-      MADRONE VIDEO LUBUMBAY • FUTURE 2030
-    </p>
-  `;
-
-  document.body.appendChild(panel);
-
-  const $ = id => document.getElementById(id);
-
-  const get = (key, fallback) => {
-    try {
-      return localStorage.getItem("md_" + key) || fallback;
-    } catch (e) {
-      return fallback;
-    }
-  };
-
-  const set = (key, value) => {
-    try {
-      localStorage.setItem("md_" + key, value);
-    } catch (e) {
-      alert("Impossible de sauvegarder cette information.");
-    }
-  };
-
-  let photoURL = "";
-
-  function refresh() {
-    $("mdpName").textContent = get("name", "Utilisateur Madrone");
-    $("mdpBio").textContent = get("bio", "Bienvenue dans mon univers vidéo !");
-    $("mdpNameInput").value = get("name", "Utilisateur Madrone");
-    $("mdpBioInput").value = get("bio", "Bienvenue dans mon univers vidéo !");
-    $("mdpAvatar").innerHTML = photoURL
-      ? `<img src="${photoURL}" alt="Photo de profil">`
-      : "👤";
-  }
-
-  button.onclick = () => {
-    refresh();
-    panel.style.display = "block";
-  };
-
-  $("mdpClose").onclick = () => {
-    panel.style.display = "none";
-  };
-
-  $("mdpEdit").onclick = () => {
-    $("mdpForm").style.display =
-      $("mdpForm").style.display === "none" ? "block" : "none";
-  };
-
-  $("mdpPhoto").onchange = event => {
-    const file = event.target.files[0];
-    if (!file || !file.type.startsWith("image/")) return;
-
-    if (photoURL) URL.revokeObjectURL(photoURL);
-    photoURL = URL.createObjectURL(file);
-    refresh();
-  };
-
-  $("mdpSave").onclick = () => {
-    const name = $("mdpNameInput").value.trim();
-
-    if (!name) {
-      alert("Entre un nom d'utilisateur.");
-      return;
-    }
-
-    set("name", name);
-    set("bio", $("mdpBioInput").value.trim());
-
-    refresh();
-    $("mdpForm").style.display = "none";
-
-    alert("Profil mis à jour !");
-  };
-
-  refresh();
-
-})();
-
-
-
-/* ======================================
-   MADRONE VIDEO 2030 - PUBLICATION VIDEO
-====================================== */
-
-(function () {
-  const feed = document.getElementById("feed");
-  if (!feed || document.getElementById("mdPublishButton")) return;
-
-  const css = document.createElement("style");
-  css.textContent = `
-    #mdPublishButton {
-      position:fixed;
-      z-index:99990;
-      bottom:85px;
-      right:15px;
-      width:58px;
-      height:58px;
-      border:2px solid #00eaff;
-      border-radius:20px;
-      color:white;
-      font-size:32px;
-      background:linear-gradient(135deg,#087cff,#b000ff);
-      box-shadow:0 0 22px #00dfff;
-    }
-
-    #mdPublishPanel {
-      display:none;
-      position:fixed;
-      inset:0;
-      z-index:999999;
-      background:#070b18;
-      color:white;
-      padding:22px;
-      box-sizing:border-box;
-      font-family:Arial,sans-serif;
-      overflow-y:auto;
-    }
-
-    #mdPublishPanel input,
-    #mdPublishPanel textarea {
-      display:block;
-      width:100%;
-      box-sizing:border-box;
-      padding:15px;
-      margin:15px 0;
-      border-radius:12px;
-      border:1px solid #28517c;
-      background:#14213b;
-      color:white;
-    }
-
-    #mdPublishPanel button {
-      padding:14px;
-      border:0;
-      border-radius:12px;
-      background:linear-gradient(90deg,#087cff,#a000ff);
-      color:white;
-      font-weight:bold;
-      margin:5px;
-    }
-
-    #mdPublishPreview {
-      width:100%;
-      max-height:300px;
-      border-radius:15px;
-      margin-top:10px;
-      background:black;
-    }
-
-    .md-new-actions {
-      position:absolute;
-      right:12px;
-      bottom:110px;
-      z-index:5;
-      display:flex;
-      flex-direction:column;
-      gap:12px;
-    }
-
-    .md-new-actions button {
-      padding:12px;
-      border:0;
-      border-radius:14px;
-      background:#16294bdb;
-      color:white;
-      font-size:19px;
-    }
-  `;
-
-  document.head.appendChild(css);
-
-  const panel = document.createElement("div");
-  panel.id = "mdPublishPanel";
-
-  panel.innerHTML = `
-    <h2>🎬 Publier une vidéo</h2>
-    <p>Partage ton talent avec MADRONE VIDEO !</p>
-
-    <input type="file" id="mdVideoFile"
-      accept="video/*">
-
-    <video id="mdPublishPreview"
-      controls playsinline style="display:none"></video>
-
-    <textarea id="mdVideoCaption"
-      placeholder="Écris une description pour ta vidéo..."></textarea>
-
-    <button id="mdPublishNow">🚀 PUBLIER MA VIDÉO</button>
-    <button id="mdCancelPublish">ANNULER</button>
-  `;
-
-  document.body.appendChild(panel);
-
-  const open = document.createElement("button");
-  open.id = "mdPublishButton";
-  open.textContent = "+";
-  open.title = "Publier une vidéo";
-  document.body.appendChild(open);
-
-  const fileInput = document.getElementById("mdVideoFile");
-  const preview = document.getElementById("mdPublishPreview");
-
-  let selectedURL = "";
-
-  open.onclick = () => {
-    panel.style.display = "block";
-  };
-
-  document.getElementById("mdCancelPublish").onclick = () => {
-    panel.style.display = "none";
-  };
-
-  fileInput.onchange = () => {
-    const file = fileInput.files[0];
-
-    if (!file) return;
-
-    if (!file.type.startsWith("video/")) {
-      alert("Choisis un fichier vidéo.");
-      fileInput.value = "";
-      return;
-    }
-
-    if (file.size > 100 * 1024 * 1024) {
-      alert("Vidéo trop volumineuse. Maximum 100 Mo.");
-      fileInput.value = "";
-      return;
-    }
-
-    if (selectedURL) URL.revokeObjectURL(selectedURL);
-
-    selectedURL = URL.createObjectURL(file);
-    preview.src = selectedURL;
-    preview.style.display = "block";
-  };
-
-  document.getElementById("mdPublishNow").onclick = () => {
-    const file = fileInput.files[0];
-    const caption = document.getElementById("mdVideoCaption").value.trim();
-
-    if (!file || !selectedURL) {
-      alert("Choisis d'abord une vidéo !");
-      return;
-    }
-
-    const card = document.createElement("article");
-    card.className = "md-feed-card";
-
-    const video = document.createElement("video");
-    video.src = selectedURL;
-    video.className = "md-feed-video";
-    video.muted = true;
-    video.loop = true;
-    video.playsInline = true;
-    video.setAttribute("playsinline", "");
-
-    const info = document.createElement("div");
-    info.className = "md-feed-info";
-
-    const username = document.createElement("h3");
-    username.textContent = "👑 " +
-      (localStorage.getItem("md_name") || "Utilisateur Madrone");
-
-    const description = document.createElement("p");
-    description.textContent = caption || "Ma nouvelle vidéo 🎬";
-
-    info.append(username, description);
-
-    const actions = document.createElement("div");
-    actions.className = "md-new-actions";
-
-    const like = document.createElement("button");
-    like.textContent = "♡ 0";
-
-    let likes = 0;
-
-    like.onclick = () => {
-      likes++;
-      like.textContent = "♥ " + likes;
-    };
-
-    const comment = document.createElement("button");
-    comment.textContent = "💬";
-
-    comment.onclick = () => {
-      const message = prompt("Écris ton commentaire :");
-      if (message && message.trim()) {
-        alert("Commentaire ajouté à cette session !");
-      }
-    };
-
-    const share = document.createElement("button");
-    share.textContent = "↗";
-
-    share.onclick = async () => {
-      if (navigator.share) {
-        try {
-          await navigator.share({
-            title: "MADRONE VIDEO",
-            text: caption || "Regarde ma vidéo !"
-          });
-        } catch (error) {}
-      } else {
-        alert("Partage non disponible sur cet appareil.");
-      }
-    };
-
-    actions.append(like, comment, share);
-    card.append(video, info, actions);
-
-    feed.prepend(card);
-
-    document.getElementById("mdPublishPanel").style.display = "none";
-
-    preview.pause();
-    preview.removeAttribute("src");
-    preview.load();
-
-    fileInput.value = "";
-    document.getElementById("mdVideoCaption").value = "";
-    preview.style.display = "none";
-    selectedURL = "";
-
-    feed.scrollTo({top:0, behavior:"smooth"});
-
-    alert("Vidéo ajoutée au fil MADRONE VIDEO !");
-  };
-
-})();
-
-
-
-/* =====================================
-   MADRONE ACCOUNT 2030
-   INSCRIPTION ET CONNEXION
-===================================== */
-
-(function () {
-  if (document.getElementById("mdAccount")) return;
-
-  const style = document.createElement("style");
-  style.textContent = `
-    #mdAccount {
-      position:fixed;
-      inset:0;
-      z-index:999999;
-      display:none;
-      overflow:auto;
-      background:radial-gradient(circle at top,#173b75,#050814 70%);
-      color:white;
-      font-family:Arial,sans-serif;
-      padding:25px;
-      box-sizing:border-box;
-    }
-
-    .md-auth-box {
-      max-width:420px;
-      margin:45px auto;
-      padding:25px;
-      border-radius:25px;
-      background:#101c35;
-      border:1px solid #1768a9;
-      box-shadow:0 0 30px #00bfff33;
-    }
-
-    .md-auth-logo {
-      text-align:center;
-      font-size:29px;
-      font-weight:900;
-      background:linear-gradient(90deg,#00eaff,#bd42ff);
-      color:transparent;
-      background-clip:text;
-      -webkit-background-clip:text;
-    }
-
-    .md-auth-input {
-      width:100%;
-      box-sizing:border-box;
-      padding:16px;
-      margin:9px 0;
-      border:1px solid #28517c;
-      border-radius:12px;
-      background:#09152b;
-      color:white;
-      font-size:15px;
-    }
-
-    .md-auth-button {
-      width:100%;
-      padding:16px;
-      margin-top:12px;
-      border:0;
-      border-radius:13px;
-      background:linear-gradient(90deg,#087cff,#a000ff);
-      color:white;
-      font-weight:bold;
-      font-size:16px;
-    }
-
-    .md-auth-switch {
-      color:#00eaff;
-      text-align:center;
-      padding:15px;
-      cursor:pointer;
-    }
-
-    .md-auth-close {
-      float:right;
-      background:#263c60;
-      color:white;
-      border:0;
-      padding:10px;
-      border-radius:10px;
-    }
-
-    .md-auth-message {
-      text-align:center;
-      color:#00eaff;
-      margin-top:15px;
-    }
-  `;
-
-  document.head.appendChild(style);
-
-  const panel = document.createElement("div");
-  panel.id = "mdAccount";
-
-  panel.innerHTML = `
-    <div class="md-auth-box">
-      <button class="md-auth-close" id="mdAuthClose">✕</button>
-
-      <div class="md-auth-logo">👑 MADRONE</div>
-      <h2 style="text-align:center">VIDEO LUBUMBAY</h2>
-
-      <div id="mdAuthForm">
-        <h3 id="mdAuthTitle">Créer un compte</h3>
-
-        <input class="md-auth-input"
-          id="mdAuthName"
-          placeholder="Nom d'utilisateur"
-          maxlength="40">
-
-        <input class="md-auth-input"
-          id="mdAuthEmail"
-          type="email"
-          placeholder="Adresse email">
-
-        <input class="md-auth-input"
-          id="mdAuthPassword"
-          type="password"
-          placeholder="Mot de passe"
-          minlength="8">
-
-        <button class="md-auth-button" id="mdAuthSubmit">
-          🚀 CRÉER MON COMPTE
-        </button>
-
-        <div class="md-auth-switch" id="mdAuthSwitch">
-          Déjà inscrit ? Se connecter
-        </div>
-
-        <div class="md-auth-message" id="mdAuthMessage"></div>
-      </div>
-
-      <div id="mdAuthConnected" style="display:none">
-        <h2 style="text-align:center">Bienvenue ! 🎉</h2>
-        <p id="mdAuthWelcome" style="text-align:center"></p>
-        <button class="md-auth-button" id="mdAuthLogout">
-          DÉCONNEXION
-        </button>
-      </div>
-
-      <p style="text-align:center;color:#8295b8;font-size:11px">
-        MADRONE VIDEO • FUTURE 2030
-      </p>
-    </div>
-  `;
-
-  document.body.appendChild(panel);
-
-  const $ = id => document.getElementById(id);
-  let loginMode = false;
-
-  function showMessage(message) {
-    $("mdAuthMessage").textContent = message;
-  }
-
-  function updateAccount() {
-    let account = null;
-
-    try {
-      account = JSON.parse(
-        sessionStorage.getItem("md_demo_account") || "null"
-      );
-    } catch (e) {}
-
-    $("mdAuthForm").style.display = account ? "none" : "block";
-    $("mdAuthConnected").style.display = account ? "block" : "none";
-
-    if (account) {
-      $("mdAuthWelcome").textContent =
-        "Bienvenue " + account.name + " sur MADRONE VIDEO !";
-    }
-  }
-
-  function changeMode() {
-    loginMode = !loginMode;
-
-    $("mdAuthTitle").textContent =
-      loginMode ? "Connexion" : "Créer un compte";
-
-    $("mdAuthName").style.display =
-      loginMode ? "none" : "block";
-
-    $("mdAuthSubmit").textContent =
-      loginMode ? "SE CONNECTER" : "🚀 CRÉER MON COMPTE";
-
-    $("mdAuthSwitch").textContent =
-      loginMode
-      ? "Pas encore de compte ? S'inscrire"
-      : "Déjà inscrit ? Se connecter";
-
-    showMessage("");
-  }
-
-  $("mdAuthSwitch").onclick = changeMode;
-
-  $("mdAuthSubmit").onclick = () => {
-    const name = $("mdAuthName").value.trim();
-    const email = $("mdAuthEmail").value.trim().toLowerCase();
-    const password = $("mdAuthPassword").value;
-
-    if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-      return showMessage("Entre une adresse email valide.");
-    }
-
-    if (password.length < 8) {
-      return showMessage("Mot de passe : 8 caractères minimum.");
-    }
-
-    if (!loginMode && !name) {
-      return showMessage("Entre ton nom d'utilisateur.");
-    }
-
-    // MODE DEMONSTRATION UNIQUEMENT
-    if (loginMode) {
-      return showMessage(
-        "La connexion réelle nécessite un serveur sécurisé."
-      );
-    }
-
-    const account = {
-      name: name,
-      email: email
-    };
-
-    try {
-      sessionStorage.setItem(
-        "md_demo_account",
-        JSON.stringify(account)
-      );
-
-      $("mdAuthPassword").value = "";
-      updateAccount();
-
-    } catch (error) {
-      showMessage("Stockage indisponible sur cet appareil.");
-    }
-  };
-
-  $("mdAuthLogout").onclick = () => {
-    sessionStorage.removeItem("md_demo_account");
-    updateAccount();
-  };
-
-  $("mdAuthClose").onclick = () => {
-    panel.style.display = "none";
-  };
-
-  // BOUTON COMPTE
-  const accountButton = document.createElement("button");
-
-  accountButton.textContent = "👤";
-  accountButton.title = "Mon compte";
-
-  accountButton.style.cssText = `
-    position:fixed;
-    top:15px;
-    right:15px;
-    z-index:99990;
-    width:48px;
-    height:48px;
-    border-radius:50%;
-    background:linear-gradient(135deg,#087cff,#a000ff);
-    color:white;
-    border:2px solid #00eaff;
-    font-size:23px;
-  `;
-
-  document.body.appendChild(accountButton);
-
-  accountButton.onclick = () => {
-    updateAccount();
-    panel.style.display = "block";
-  };
-
-})();
-
-
+  // Connexion locale de démonstration, pas une vraie authentification.
+  currentUser=email;
+  localStorage.setItem("swUser",email);
+  document.getElementById("accountMessage").textContent="Compte démo ouvert : "+email;
+}
+
+function logout(){
+  currentUser="";
+  localStorage.removeItem("swUser");
+  document.getElementById("accountMessage").textContent="Déconnexion effectuée.";
+}
+
+function paymentDemo(){
+  const method=document.getElementById("payment").value;
+  document.getElementById("paymentMessage").textContent=
+    "Moyen choisi : "+method+". Paiement de démonstration uniquement : aucun débit effectué.";
+}
+
+function saveLanguage(){
+  const language=document.getElementById("language").value;
+  localStorage.setItem("swLanguage",language);
+  document.getElementById("settingsMessage").textContent=
+    "Préférence enregistrée : "+language+". La traduction complète reste à ajouter.";
+}
+
+function notify(){
+  document.getElementById("settingsMessage").textContent=
+    "Les notifications seront activées lorsque le site aura un serveur et un service de notifications.";
+}
+
+const savedLanguage=localStorage.getItem("swLanguage");
+if(savedLanguage)document.getElementById("language").value=savedLanguage;
+
+render();
 </script>
-
 </body>
 </html>
+
